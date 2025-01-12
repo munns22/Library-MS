@@ -1,6 +1,7 @@
 package com.demo.SampleLibrary.controller;
 
 import com.demo.SampleLibrary.entity.Book;
+import com.demo.SampleLibrary.error.BookDoesNotExistException;
 import com.demo.SampleLibrary.service.BooksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class BooksController {
     }
 
     @GetMapping("/find/{bookId}")
-    public Book findBook(@PathVariable int bookId){
+    public Book findBook(@PathVariable int bookId) throws BookDoesNotExistException {
         return booksService.fetchBookDetails(bookId);
     }
     @GetMapping("/findAll")

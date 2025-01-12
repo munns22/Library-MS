@@ -2,6 +2,7 @@ package com.demo.SampleLibrary.controller;
 
 import com.demo.SampleLibrary.entity.Book;
 import com.demo.SampleLibrary.entity.Member;
+import com.demo.SampleLibrary.error.InvalidMembershipException;
 import com.demo.SampleLibrary.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -21,7 +22,7 @@ public class MemberController {
     }
 
     @PutMapping("/issueBook/{memberId}")
-    public List<Book>  issueBookToMember(@RequestBody List<Integer> bookIds, @PathVariable int memberId){
+    public List<Book>  issueBookToMember(@RequestBody List<Integer> bookIds, @PathVariable int memberId) throws InvalidMembershipException {
         return memberService.issueBook(bookIds, memberId);
     }
 
