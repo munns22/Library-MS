@@ -1,6 +1,7 @@
 package com.demo.SampleLibrary.service;
 
 import com.demo.SampleLibrary.entity.Book;
+import com.demo.SampleLibrary.error.BookDoesNotExistException;
 import com.demo.SampleLibrary.repository.BookRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -24,10 +25,13 @@ public class BooksServiceImpl implements BooksService {
         return bookRepository.save(book);
     }
     @Override
-    public Book fetchBookDetails(int bookId) {
+    public Book fetchBookDetails(int bookId) throws BookDoesNotExistException {
         logger.info("Reached in Service");
         Optional<Book> fetchedBook=bookRepository.findById(bookId);
+        if(fetchedBook.isPresent())
         return fetchedBook.get();
+        else
+            throw new BookDoesNotExistException("Book doesn't exist");
     }
 
     @Override
