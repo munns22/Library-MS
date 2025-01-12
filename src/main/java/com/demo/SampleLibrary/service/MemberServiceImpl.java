@@ -2,6 +2,7 @@ package com.demo.SampleLibrary.service;
 
 import com.demo.SampleLibrary.entity.Book;
 import com.demo.SampleLibrary.entity.Member;
+import com.demo.SampleLibrary.error.InvalidMembershipException;
 import com.demo.SampleLibrary.repository.BookRepository;
 import com.demo.SampleLibrary.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Book> issueBook(List<Integer> bookIds, int memberId) {
+    public List<Book> issueBook(List<Integer> bookIds, int memberId) throws InvalidMembershipException {
         Member member =memberRepository.findById(memberId).get();
         List<Book>books =bookRepository.findByBookIdIn(bookIds);
-        member.setBooks(books);
-        memberRepository.save(member);
-        return books;
+        if(member.isMembershipStatus()) {
+            member.setBooks(books);
+            memberRepository.save(member);
+            return books;
+        }else{
+            throw new InvalidMembershipException("Membership is Deactive");
+        }
     }
 }
